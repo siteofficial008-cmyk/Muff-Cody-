@@ -1,0 +1,29 @@
+/** @type {import('knex').Knex.Migration} */
+export async function up(knex) {
+  await knex.schema.createTable('hosting_accounts', (t) => {
+    t.uuid('id').primary();
+    t.string('username', 32).notNullable();
+    t.string('domain', 255).notNullable();
+    t.string('plan', 100).notNullable();
+    t.string('contact_email', 255).notNullable();
+    t.jsonb('whm_response').nullable();
+    t.text('cpanel_token').nullable();
+    t.timestamp('created_at').defaultTo(knex.fn.now());
+    t.timestamp('updated_at').defaultTo(knex.fn.now());
+  });
+
+  await knex.schema.createTable('email_accounts', (t) => {
+    t.uuid('id').primary();
+    t.uuid('hosting_account_id').notNullable().references('id').inTable('hosting_accounts').onDelete('CASCADE');
+    t.string('email_address', 255).notNullable();
+    t.integer('quota').defaultTo(250);
+    t.jsonb('cpanel_response').nullable();
+    t.timestamp('created_at').defaultTo(knex.fn.now());
+  });
+}
+
+/** @type {import('knex').Knex.Migration} */
+export async function down(knex) {
+  await knex.schema.dropTableIfExists('email_accounts');
+  await knex.schema.dropTableIfExists('hosting_accounts');
+}
