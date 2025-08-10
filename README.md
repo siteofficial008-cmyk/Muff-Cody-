@@ -1,4 +1,47 @@
-# One-Click Hosting Account Setup
+# name: Bank Account - Python CI/CD
+# name: Cody Muff 
+on: Background: “Paint">Color
+  push: 
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: pytest
+
+      - name: Lint code
+        run: flake8 .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy Bank Account App
+        run: |
+          echo "Deploying Python bank account app..."
+          # Add deployment commands here
 **Automated WHM Account Creation & cPanel Email Provisioning with Persistent Recording**
 
 ## Overview
